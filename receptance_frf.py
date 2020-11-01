@@ -14,7 +14,7 @@ def r_amp(k, m, zeta, w):
     c = 2 * zeta * np.sqrt(k * m)
     return 1/np.sqrt((k - m * w ** 2)** 2 + (w * c)** 2)
     
-#Function to calculate SDOF receptance phse angle
+#Function to calculate SDOF receptance phase angle
 def r_phase(k, m, zeta, w):
     c = 2 * zeta * np.sqrt(k * m)
     return np.arctan(- w * c / (k - m * w ** 2))
