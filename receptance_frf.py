@@ -29,3 +29,24 @@ def plot_RFRF(w, r_amp, r_phase):
     plt.show()
     
 plot_RFRF(w, r_amp(k, m, zeta, w), r_phase(k, m, zeta, w))
+
+#Function to calculate SDOF mobility amplitude
+def m_amp(w, r_amp):
+    return w * r_amp
+
+#Function to calculate SDOF inertance amplitude
+def i_amp(w, r_amp):
+    return (w**2) * r_amp
+
+# Amplitude Bode plots SDOF system
+def plot_FRF_amp(w, r_amp, m_amp, i_amp):
+    fig, ax = plt.subplots(3, figsize=(9, 12), sharex = 'col', sharey = 'row')
+    ax[0].plot(w, r_amp)
+    ax[1].plot(w, m_amp)
+    ax[2].plot(w, i_amp)
+    ax[0].set(ylabel = 'Amplitude (m)', title = "Amplitude vs Frequency")
+    ax[1].set(ylabel = 'Amplitude (m/s)')
+    ax[2].set(ylabel = 'Amplitude (m/s^2)', xlabel = 'Frequency (Hz)', xticks = np.arange(0,11,1))
+    plt.show()
+    
+plot_FRF_amp(w, r_amp(k, m, zeta, w), m_amp(w, r_amp(k, m, zeta, w)), i_amp(w, r_amp(k, m, zeta, w)))
