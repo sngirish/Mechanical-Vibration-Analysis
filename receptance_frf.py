@@ -26,10 +26,10 @@ def plot_RFRF(w, r_amp, r_phase):
     ax[1].plot(w, r_phase)
     ax[0].set(ylabel = 'Amplitude (m/N)')
     ax[1].set(ylabel = 'Phase angle (rad)', xlabel = 'Frequency (Hz)', \
-              title = "Phase angle vs Frequency", xticks = np.arange(0,11,1))
+              xticks = np.arange(0,11,1))
 
-    plt.text(0.1, 0.9, 'Receptance Amplitude', transform = ax[0].transAxes)
-    plt.text(0.1, 0.9, 'Receptance Phase', transform = ax[1].transAxes)
+    plt.text(0.6, 0.9, 'Receptance Amplitude', transform = ax[0].transAxes)
+    plt.text(0.6, 0.9, 'Receptance Phase', transform = ax[1].transAxes)
     plt.show()
     
 plot_RFRF(w, r_amp(k, m, zeta, w), r_phase(k, m, zeta, w))
