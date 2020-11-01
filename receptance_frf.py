@@ -24,8 +24,8 @@ def plot_RFRF(w, r_amp, r_phase):
     fig, ax = plt.subplots(2, sharex = 'col', sharey = 'row')
     ax[0].plot(w, r_amp)
     ax[1].plot(w, r_phase)
-    ax[0].set(title = "Amplitude vs Frequency")
-    ax[1].set(title = "Phase angle vs Frequency")
+    ax[0].set(ylabel = 'Amplitude (m)', title = "Amplitude vs Frequency")
+    ax[1].set(ylabel = 'Phase andgle (rad)', xlabel = 'Frequency (Hz)', title = "Phase angle vs Frequency", xticks = np.arange(0,11,1))
     plt.show()
     
 plot_RFRF(w, r_amp(k, m, zeta, w), r_phase(k, m, zeta, w))
