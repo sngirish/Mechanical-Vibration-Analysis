@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import cmath
 
 #Define system properties
 m = 1.0
@@ -9,26 +9,38 @@ zeta = 0.02 #Damping ratio c/2*sqrt(k*m)
 
 #Frequency range w vector
 w = np.arange(1, 10, 0.02)
-
+c = 2 * zeta * np.sqrt(k * m)
 #Function to calculate SDOF receptance amplitude
-def r_amp(k, m, zeta, w):
-    c = 2 * zeta * np.sqrt(k * m)
+def r_amp(k, m, c, w):
     return 1/np.sqrt((k - m * w**2)**2 + (w * c)**2)
     
 #Function to calculate SDOF receptance phase angle
-def r_phase(k, m, zeta, w):
-    c = 2 * zeta * np.sqrt(k * m)
+def r_phase(k, m, c, w):
     return np.arctan(- w * c / (k - m * w**2))
 
 #Function to calculate real part of receptance FRF
-def r_real(k, m, zeta, w):
-    c = 2 * zeta * np.sqrt(k * m)
+def r_real(k, m, c, w):
     return (k - m*w**2)/((k - m * w**2)**2 + (w * c)**2)
 
 #Function to calculate imaginary part of receptance FRF
-def r_img(k, m, zeta, w):
-    c = 2 * zeta * np.sqrt(k * m)
+def r_imag(k, m, c, w):
     return (-c*w)/((k - m * w**2)**2 + (w * c)**2)
+
+#Function to calculate real part of mobility FRF
+def m_imag(k, m, c, w):
+    return w*(k - m*w**2)/((k - m * w**2)**2 + (w * c)**2)
+
+#Function to calculate imaginary part of mobility FRF
+def m_real(k, m, c, w):
+    return (c*w**2)/((k - m * w**2)**2 + (w * c)**2)
+
+#Function to calculate real part of inertance FRF
+def i_real(k, m, c, w):
+    return (-w**2)*(k - m*w**2)/((k - m * w**2)**2 + (w * c)**2)
+
+#Function to calculate imaginary part of inertance FRF
+def i_imag(k, m, c, w):
+    return (c*w**3)/((k - m * w**2)**2 + (w * c)**2)
 
 #Function to set plot properties and showing Bode plot for SDOF system
 def plot_RFRF(w, r_amp, r_phase):
@@ -117,7 +129,7 @@ def plot_frf_amp_log_compare2(w, r_amp1, r_amp2):
 #plot_frf_amp_log_compare2(w, r_amp(k, m, zeta, w), r_amp(k, m*0.4, zeta, w))
 #plt.savefig("C:/Users/e1206659/Pictures/amp_comparison_frf_log_compare2.png")
 
-def nyquist_plot(r_real, r_img):
+def nyquist_plot(real, img):
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -129,13 +141,31 @@ def nyquist_plot(r_real, r_img):
     ax.spines['top'].set_color('none')
 
     
-    plt.plot(r_real, r_img, marker = '+')
+    plt.plot(real, img, marker = '+')
     plt.axis('square')
     plt.xlabel('Real part', horizontalalignment='left', position=(1,25))
     plt.ylabel('Imaginary part')
     plt.title('Receptance Nyquist Plot')
 
-   # plt.xscale('log')
-    plt.show()
+    #plt.show()
+
+def nyquist_plots(r_real, m_real, i_real, r_imag, m_imag, i_imag):    
+    fig, ax = plt.subplots(1,3, figsize=(9, 3))
+    fig.suptitle('Nyquist plot: Receptance, Mobility and Inertance')
+
+    ax[0].plot(r_real, r_imag, marker = '+')
+    ax[1].plot(m_real, m_imag, marker = '+')
+    ax[2].plot(i_real, i_imag, marker = '+')
+    for i in range(3):
+        ax[i].spines['left'].set_position(('data', 0.0))
+        ax[i].spines['bottom'].set_position(('data', 0.0))
+        ax[i].spines['right'].set_color('none')
+        ax[i].spines['top'].set_color('none')
+        ax[i].axis('square')
+        
+    #plt.show()
+
+nyquist_plots(r_real(k,m,c,w), m_real(k,m,c,w), i_real(k,m,c,w),\
+              r_imag(k,m,c,w), m_imag(k,m,c,w), i_imag(k,m,c,w))
     
-nyquist_plot(r_real(k, m, zeta, w), r_img(k, m, zeta, w))
+plt.savefig("C:/Users/e1206659/Pictures/nyquist_plots.png")
